@@ -2,13 +2,12 @@ package com.sap.util;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.sql.DataSource;
-
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 
 public class HibernateUtil {
@@ -18,16 +17,15 @@ public class HibernateUtil {
 	public static SessionFactory getSessionFactory() {
 		if (sessionFactory == null) {
 			try {
-				StandardServiceRegistryBuilder registryBuilder = new StandardServiceRegistryBuilder();
+				Configuration cfg = new Configuration();
+				cfg.addAnnotatedClass(com.sap.pojo.Employee.class);
+				StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder();
 				Map<String, Object> settings = new HashMap<>();
 				settings.put(Environment.DATASOURCE, getDataSource());
 				settings.put(Environment.SHOW_SQL, "true");
-				registryBuilder.applySettings(settings);
-				registry = registryBuilder.build();
-				org.hibernate.metamodel.MetadataSources sources = new org.hibernate.metamodel.MetadataSources(registry)
-						.addAnnotatedClass(com.sap.pojo.Employee.class);
-				org.hibernate.metamodel.Metadata metadata = sources.getMetadataBuilder().build();
-				sessionFactory = metadata.getSessionFactoryBuilder().build();
+				builder.applySettings(settings);
+				registry = builder.build();
+				sessionFactory = cfg.buildSessionFactory(registry);
 			} catch (Exception e) {
 				if (registry != null) {
 					StandardServiceRegistryBuilder.destroy(registry);

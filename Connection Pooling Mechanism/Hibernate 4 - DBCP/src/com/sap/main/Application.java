@@ -14,14 +14,13 @@ public class Application {
 			session = HibernateUtil.getSessionFactory().openSession();
 			transaction = session.getTransaction();
 			transaction.begin();
-
 			Employee employee = new Employee();
-			employee.setEmployeeId(222);
-			employee.setEmployeeName("Harsh");
-			employee.setEmployeeSalary(122000.0f);
+			employee.setEmployeeId(111);
+			employee.setEmployeeName("Aditya");
+			employee.setEmployeeSalary(25000.0f);
 			session.save(employee);
-
 			transaction.commit();
+			System.out.print("Data Inserted");
 		} catch (Exception e) {
 			if (transaction != null) {
 				transaction.rollback();
