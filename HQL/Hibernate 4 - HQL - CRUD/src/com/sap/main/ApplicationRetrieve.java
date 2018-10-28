@@ -78,7 +78,7 @@ public class ApplicationRetrieve {
 
 			System.out.println();
 			System.out.println();
-			
+
 			// Approach-5
 			Object obj = unique.uniqueResult();
 			Employee e = (Employee) obj;
@@ -87,7 +87,8 @@ public class ApplicationRetrieve {
 			System.out.println(e.getEmployeeSalary() + "	\t");
 
 			// SELECT CLAUSE
-			Query query1 = session.createQuery("select e.employeeId,e.employeeName from Employee e where e.employeeName IS NOT NULL");
+			Query query1 = session
+					.createQuery("select e.employeeId,e.employeeName from Employee e where e.employeeName IS NOT NULL");
 			List<Object[]> list1 = query1.list();
 			System.out.println("Employee No\t Employename\t");
 			System.out.println("---------------------------");
@@ -98,9 +99,9 @@ public class ApplicationRetrieve {
 				System.out.println();
 			}
 
-			//ORDER BY CLAUSE
+			// ORDER BY CLAUSE
 			Query query2 = session.createQuery(
-					"select e.employeeId,e.employeeName from Employee e where e.employeeSalary>=1000 order by e.employeeName desc");
+					"select e.employeeId,e.employeeName from Employee e where e.employeeSalary>=(select min(employeeSalary) from Employee) order by e.employeeName desc");
 			List<Object[]> list2 = query2.list();
 			System.out.println("Employee No\t Employename\t");
 			System.out.println("---------------------------");
@@ -111,27 +112,30 @@ public class ApplicationRetrieve {
 				System.out.println();
 			}
 
-			//GROUP BY 
+			// GROUP BY
 			Query query3 = session.createQuery("select sum(e.employeeSalary) from Employee e group by e.employeeName");
 			List<Double> list3 = query3.list();
 			for (Double val : list3) {
 				System.out.println(val);
 			}
-			
-			//GROUP BY + HAVING
-			Query query4 = session.createQuery("select count(e.employeeSalary) from Employee e group by e.employeeSalary having e.employeeSalary>500");
+
+			// GROUP BY + HAVING
+			Query query4 = session.createQuery(
+					"select count(e.employeeSalary) from Employee e group by e.employeeSalary having e.employeeSalary>500");
 			List<Long> list4 = query4.list();
 			for (Long val : list4) {
 				System.out.println(val);
 			}
-			
-			//BETWEEN 
-			Query query5 = session.createQuery("select employeeName from Employee where employeeSalary BETWEEN 2000 and 2000000");
+
+			// BETWEEN
+			Query query5 = session
+					.createQuery("select employeeName from Employee where employeeSalary BETWEEN ? and :max_Sal");
+			query5.setParameter(0, 2000.0f);
+			query5.setFloat("max_Sal", 200000.0f);
 			List<String> list5 = query5.list();
 			for (String val : list5) {
 				System.out.println(val);
 			}
-			
 
 			System.out.println("Employee Data retrieved");
 
