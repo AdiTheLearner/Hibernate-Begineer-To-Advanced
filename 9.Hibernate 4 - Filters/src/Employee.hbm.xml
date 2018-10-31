@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="com.sap.pojo.Employee" table="Employee">
+		<id name="employeeId" column="employeeId"></id>
+		<property name="employeeName" column="employeeName"></property>
+		<property name="employeeSalary" column="employeeSalary"></property>
+		<property name="etype" column="etype"></property>
+		<filter name="employeeFilter" condition=":type=etype" />
+	</class>
+	<filter-def name="employeeFilter">
+		<filter-param name="type" type="string" />
+	</filter-def>
+</hibernate-mapping>
